@@ -9,18 +9,29 @@ using IEXTrading.Models;
 using IEXTrading.Models.ViewModel;
 using IEXTrading.DataAccess;
 using Newtonsoft.Json;
+using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Http;
 
 namespace MVCTemplate.Controllers
 {
+    
     public class HomeController : Controller
     {
         public ApplicationDbContext dbContext;
-
-        public HomeController(ApplicationDbContext context)
+        private readonly AppSettings _appSettings;
+        public const string SessionKeyName = "StockData";
+        //List<Company> companies = new List<Company>();
+        public HomeController(ApplicationDbContext context, IOptions<AppSettings> appSettings)
         {
             dbContext = context;
+            _appSettings = appSettings.Value;
         }
 
+        public IActionResult HelloIndex()
+        {
+            ViewBag.Hello = _appSettings.Hello;
+            return View();
+        }
         public IActionResult Index()
         {
             return View();
@@ -37,8 +48,21 @@ namespace MVCTemplate.Controllers
             IEXHandler webHandler = new IEXHandler();
             List<Company> companies = webHandler.GetSymbols();
 
+            String companiesData = JsonConvert.SerializeObject(companies);
+            //int size =  System.Text.ASCIIEncoding.ASCII.GetByteCount(companiesData);
+
+            HttpContext.Session.SetString(SessionKeyName, companiesData);
             //Save comapnies in TempData
-            TempData["Companies"] = JsonConvert.SerializeObject(companies);
+            //if ( size < 4000)
+            //{
+            //    TempData["Companies"] = companiesData;
+            //}
+            //else
+            //{
+            //    TempData["Companies"] = "Fetch";
+            //}
+            
+            
 
             return View(companies);
         }
@@ -83,7 +107,13 @@ namespace MVCTemplate.Controllers
         ****/
         public IActionResult PopulateSymbols()
         {
-            List<Company> companies = JsonConvert.DeserializeObject<List<Company>>(TempData["Companies"].ToString());
+            string companiesData = HttpContext.Session.GetString(SessionKeyName);
+            List<Company> companies = null;
+            if (companiesData != "")
+            {
+                 companies = JsonConvert.DeserializeObject<List<Company>>(companiesData);
+            }
+            
             foreach (Company company in companies)
             {
                 //Database will give PK constraint violation error when trying to insert record with existing PK.
