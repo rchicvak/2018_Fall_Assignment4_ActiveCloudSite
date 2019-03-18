@@ -14,5 +14,14 @@ namespace IEXTrading.DataAccess
 
         public DbSet<Company> Companies { get; set; }
         public DbSet<Equity> Equities { get; set; }
+        public DbSet<Top> Tops { get; set; }
+        public DbSet<Financial> Financials { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Financial>()
+                .HasKey(c => new { c.symbol, c.reportDate });
+        }
+
     }
 }

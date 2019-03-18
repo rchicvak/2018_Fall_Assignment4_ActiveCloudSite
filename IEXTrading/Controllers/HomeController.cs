@@ -14,7 +14,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace MVCTemplate.Controllers
 {
-    
+
     public class HomeController : Controller
     {
         public ApplicationDbContext dbContext;
@@ -61,8 +61,8 @@ namespace MVCTemplate.Controllers
             //{
             //    TempData["Companies"] = "Fetch";
             //}
-            
-            
+
+
 
             return View(companies);
         }
@@ -111,9 +111,9 @@ namespace MVCTemplate.Controllers
             List<Company> companies = null;
             if (companiesData != "")
             {
-                 companies = JsonConvert.DeserializeObject<List<Company>>(companiesData);
+                companies = JsonConvert.DeserializeObject<List<Company>>(companiesData);
             }
-            
+
             foreach (Company company in companies)
             {
                 //Database will give PK constraint violation error when trying to insert record with existing PK.
@@ -196,6 +196,100 @@ namespace MVCTemplate.Controllers
             float avgprice = equities.Average(e => e.high);
             double avgvol = equities.Average(e => e.volume) / 1000000; //Divide volume by million
             return new CompaniesEquities(companies, equities.Last(), dates, prices, volumes, avgprice, avgvol);
+        }
+
+ 
+
+        public IActionResult Tops()
+        {
+            //Set ViewBag variable first
+            ViewBag.dbSucessComp = 0;
+            IEXHandler webHandler = new IEXHandler();
+            List<Top> tops = webHandler.GetTops();
+
+            String topsData = JsonConvert.SerializeObject(tops);
+
+            HttpContext.Session.SetString(SessionKeyName, topsData);
+
+            return View(tops);
+        }
+
+        public IActionResult SaveTops()
+        {
+            string topsData = HttpContext.Session.GetString(SessionKeyName);
+            List<Top> tops = null;
+            if (topsData != "")
+            {
+                tops = JsonConvert.DeserializeObject<List<Top>>(topsData);
+            }
+
+            foreach (Top top in tops)
+            {
+                //Database will give PK constraint violation error when trying to insert record with existing PK.
+                //So add company only if it doesnt exist, check existence using symbol (PK)
+                if (dbContext.Tops.Where(c => c.symbol.Equals(top.symbol)).Count() == 0)
+                {
+                    dbContext.Tops.Add(top);
+                }
+            }
+            dbContext.SaveChanges();
+            ViewBag.dbSuccessComp = 1;
+            return View("Tops", tops);
+        }
+
+
+        // Financial 
+
+        public IActionResult Financials(string symbol)
+        {
+            //Set ViewBag variable first
+            ViewBag.dbSucessComp = 0;
+            List<Financial> financials = new List<Financial>();
+
+            if (symbol != null)
+            {
+                IEXHandler webHandler = new IEXHandler();
+                financials = webHandler.GetFinancials(symbol);
+            }
+
+            CompaniesFinancials companiesFinancials = getCompaniesFinancialsModel(financials);
+
+            return View(companiesFinancials);
+        }
+
+
+        public IActionResult SaveFinancials(string symbol)
+        {
+            IEXHandler webHandler = new IEXHandler();
+            List<Financial> financials = webHandler.GetFinancials(symbol);
+
+            foreach (Financial financial in financials)
+            {
+                if (dbContext.Financials.Where(c => c.reportDate.Equals(financial.reportDate)).Where(c => c.symbol.Equals(financial.symbol)).Count() == 0)
+                {
+                    dbContext.Financials.Add(financial);
+                }
+            }
+
+            dbContext.SaveChanges();
+            ViewBag.dbSuccessChart = 1;
+
+            CompaniesFinancials companiesFinancials = getCompaniesFinancialsModel(financials);
+
+            return View("Financials", companiesFinancials);
+        }
+
+        public CompaniesFinancials getCompaniesFinancialsModel(List<Financial> financials)
+        {
+            List<Company> companies = dbContext.Companies.ToList();
+
+            if (financials.Count == 0)
+            {
+                return new CompaniesFinancials(companies, null);
+            }
+            
+            return new CompaniesFinancials(companies, financials);
+
         }
 
     }

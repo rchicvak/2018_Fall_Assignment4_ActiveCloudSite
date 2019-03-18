@@ -77,5 +77,61 @@ namespace IEXTrading.Infrastructure.IEXTradingHandler
 
             return Equities;
         }
+
+        /****
+        * Calls the IEX reference API to get the list of tops. 
+        ****/
+        public List<Top> GetTops()
+        {
+            // string IEXTrading_API_PATH = BASE_URL + "tops";
+            string IEXTrading_API_PATH = "http://localhost:63101/testData.json";
+            string topsList = "";
+
+            List<Top> tops = null;
+                //https://api.iextrading.com/1.0/tops
+            httpClient.BaseAddress = new Uri(IEXTrading_API_PATH);
+            HttpResponseMessage response = httpClient.GetAsync(IEXTrading_API_PATH).GetAwaiter().GetResult();
+            if (response.IsSuccessStatusCode)
+            {
+                topsList = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+            }
+
+            if (!topsList.Equals(""))
+            {
+                tops = JsonConvert.DeserializeObject<List<Top>>(topsList);
+                // tops = tops.GetRange(0, 50);
+            }
+            return tops;
+        }
+
+
+
+        /****
+         * Calls the IEX stock API to get 1 year's financials for the supplied symbol. 
+        ****/
+        public List<Financial> GetFinancials(string symbol)
+        {
+            //Using the format method.
+            //string IEXTrading_API_PATH = BASE_URL + "stock/{0}/batch?types=chart&range=1y";
+            //IEXTrading_API_PATH = string.Format(IEXTrading_API_PATH, symbol);
+
+            string IEXTrading_API_PATH = BASE_URL + "stock/" + symbol + "/financials";
+
+            string financials = "";
+            List<Financial> Financials = new List<Financial>();
+            httpClient.BaseAddress = new Uri(IEXTrading_API_PATH);
+            HttpResponseMessage response = httpClient.GetAsync(IEXTrading_API_PATH).GetAwaiter().GetResult();
+            if (response.IsSuccessStatusCode)
+            {
+                financials = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+            }
+            if (!financials.Equals(""))
+            {
+                FinancialWrapper root = JsonConvert.DeserializeObject<FinancialWrapper>(financials, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+                Financials = root.convert(symbol);
+            }
+
+            return Financials;
+        }
     }
 }

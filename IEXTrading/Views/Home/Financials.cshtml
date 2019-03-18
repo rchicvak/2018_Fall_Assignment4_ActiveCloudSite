@@ -1,0 +1,176 @@
+﻿@model IEXTrading.Models.ViewModel.CompaniesFinancials
+
+@{
+    ViewData["Title"] = "Financials";
+}
+
+
+<h2>Financial</h2>
+<hr />
+// lookup company
+<form asp-controller="Home" asp-action="Financials" method="get">
+    <select name="symbol">
+        @foreach (var company in Model.Companies)
+        {
+            <option value=@company.symbol selected>@company.name</option>
+        }
+    </select>
+    <input type="submit" value="Get Financials" />
+</form>
+@if (Model.SelectedFinancial != null)
+{
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Symbol
+                </th>
+                <th>
+                    Report Date
+                </th>
+                <th>
+                    Gross Profit
+                </th>
+                <th>
+                    Cost Of Revenue
+                </th>
+                <th>
+                    Operating Revenue
+                </th>
+                <th>
+                    Total Revenue
+                </th>
+                <th>
+                    Operating Income
+                </th>
+                <th>
+                    Net Income
+                </th>
+                <th>
+                    Research And Development
+                </th>
+                <th>
+                    Operating Expense
+                </th>
+                <th>
+                    Current Assets
+                </th>
+                <th>
+                    Total Assets
+                </th>
+                <th>
+                    Total Liabilities
+                </th>
+                <th>
+                    Current Cash
+                </th>
+                <th>
+                    Current Debt
+                </th>
+                <th>
+                    Total Cash
+                </th>
+                <th>
+                    Total Debt
+                </th>
+                <th>
+                    Shareholder Equity
+                </th>
+                <th>
+                    Cash Change
+                </th>
+                <th>
+                    Cash Flow
+                </th>
+                <th>
+                    Operating Gains Losses
+                </th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            @foreach (var item in Model.SelectedFinancial)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.symbol)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.reportDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.grossProfit)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.costOfRevenue)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.operatingRevenue)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.totalRevenue)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.operatingIncome)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.netIncome)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.researchAndDevelopment)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.operatingExpense)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.currentAssets)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.totalAssets)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.totalLiabilities)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.currentCash)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.currentDebt)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.totalCash)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.totalDebt)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.shareholderEquity)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.cashChange)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.cashFlow)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.operatingGainsLosses)
+                    </td>
+
+                </tr>
+            }
+            <tr>
+                <td>
+                    <a id="dbopt" asp-controller="Home" asp-action="SaveFinancials" asp-route-symbol="@Model.SelectedFinancial.First().symbol" >
+                        <img src="~/images/button_save-data.png" />
+                    </a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+}
+    <script>
+    alertDbSave(@ViewBag.dbSuccessComp);
+    </script>
+
