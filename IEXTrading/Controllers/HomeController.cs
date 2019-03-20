@@ -292,5 +292,27 @@ namespace MVCTemplate.Controllers
 
         }
 
+        // Ratios (part of data from API
+
+        public IActionResult Ratios(string symbol)  // action
+        {
+            //Set ViewBag variable first
+            ViewBag.dbSucessComp = 0;
+            List<Financial> financials = new List<Financial>();
+
+            if (symbol != null)
+            {
+                IEXHandler webHandler = new IEXHandler();  // gets data from api
+                financials = webHandler.GetFinancials(symbol);
+            }
+
+            CompaniesFinancials companiesFinancials = getCompaniesFinancialsModel(financials);
+
+            return View(companiesFinancials);
+        }
+
+
     }
+
+
 }

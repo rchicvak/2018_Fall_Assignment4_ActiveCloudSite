@@ -1,0 +1,81 @@
+﻿@model IEXTrading.Models.ViewModel.CompaniesFinancials
+
+@{
+    ViewData["Title"] = "Ratios";   //  change to title
+}
+
+
+<h2>Ratios</h2>
+<hr />
+
+<form asp-controller="Home" asp-action="Ratios" method="get">
+    <select name="symbol">
+        @foreach (var company in Model.Companies)
+        {
+            <option value=@company.symbol selected>@company.name</option>
+        }
+    </select>
+    <input type="submit" value="Get Ratios" />
+</form>
+@if (Model.SelectedFinancial != null)
+{
+    <!-- Column Header -->
+    <table class="table">  <!--     html comment   -->
+        <thead>
+            <tr>
+                <th>
+                    Symbol
+                </th>
+                <th>
+                    Report Date
+                </th>
+                <th>
+                    Research And Development
+                </th>
+                <th>
+                    Total Revenue
+                </th>
+                <th>
+                    Percent RD of Revenue
+                </th>
+                <th>
+                    Net Income
+                </th>
+                <th>
+                    Debt to Equity %
+                </th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            @foreach (var item in Model.SelectedFinancial)
+            {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.symbol)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.reportDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.researchAndDevelopment)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.totalRevenue)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.percentRD)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.netIncome)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.debtEquity)
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+}
+
