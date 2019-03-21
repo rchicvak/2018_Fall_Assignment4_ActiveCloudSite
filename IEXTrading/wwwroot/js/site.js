@@ -65,8 +65,43 @@
     });
 }
 
+
+
+
 function alertDbSave(success) {
     if (success === 1) {
         alert("Data saved successfully");
     }
 }
+
+
+function getRatioChart(dates, percentRD) {
+    var ctx = document.getElementById("myChart").getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: dates.split(","),
+            datasets: [{
+                label: 'Percent of Sales Spent on R&D',
+                yAxisID: 'H',
+                data: percentRD.split(","),
+                type: 'line',
+                borderColor: 'rgba(0, 103, 71, 1)',
+                backgroundColor: 'rgba(0, 103, 71, 0.1)',
+                lineTension: 0
+            }]
+        },
+        options: {
+            responsive: false,
+            scales: {
+                yAxes: [{
+                    id: 'H',
+                    type: 'linear',
+                    position: 'left',
+                }]
+            }
+        }
+    });
+}
+
+

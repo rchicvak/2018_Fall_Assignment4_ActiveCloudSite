@@ -285,10 +285,13 @@ namespace MVCTemplate.Controllers
 
             if (financials.Count == 0)
             {
-                return new CompaniesFinancials(companies, null);
+                return new CompaniesFinancials(companies, null, null, null);
             }
-            
-            return new CompaniesFinancials(companies, financials);
+
+            string dates = string.Join(",", financials.Select(e => e.reportDate));
+            string percentsRD = string.Join(",", financials.Select(e => e.percentRD));
+
+            return new CompaniesFinancials(companies, financials, dates, percentsRD);
 
         }
 

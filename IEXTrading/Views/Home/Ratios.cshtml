@@ -77,5 +77,12 @@
             }
         </tbody>
     </table>
-}
+    <div>
+        <canvas id="myChart" height="500" width="800"></canvas>
+    </div>  
+ }
 
+<script>
+    getRatioChart("@Model.Dates", "@Model.RDPercents");
+    alertDbSave(@ViewBag.dbSuccessChart);
+</script>
