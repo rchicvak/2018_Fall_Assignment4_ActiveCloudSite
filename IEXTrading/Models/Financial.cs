@@ -17,6 +17,7 @@ namespace IEXTrading.Models
                 f.symbol = symbol;
                 f.percentRD = (double)f.researchAndDevelopment / f.totalRevenue;  // division forced non-integer
                 f.debtEquity = (double)f.totalDebt / f.shareholderEquity;  // division forced non-integer
+                f.debtAsset = (double)f.totalDebt / f.totalAssets;  // division forced non-integer
             }
             return financials;
         }
@@ -68,5 +69,7 @@ namespace IEXTrading.Models
         public double percentRD { get; set; }
         [DisplayFormat(DataFormatString = "{0:P2}")]  // p = percent   2  = 2 decimals
         public double debtEquity { get; set; }
+        [DisplayFormat(DataFormatString = "{0:P2}")]  // p = percent   2  = 2 decimals
+        public double debtAsset { get; set; }
     }
 }
