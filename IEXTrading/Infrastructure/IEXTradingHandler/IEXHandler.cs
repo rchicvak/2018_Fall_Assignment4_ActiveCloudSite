@@ -83,12 +83,12 @@ namespace IEXTrading.Infrastructure.IEXTradingHandler
         ****/
         public List<Top> GetTops()
         {
-            // string IEXTrading_API_PATH = BASE_URL + "tops";
-            string IEXTrading_API_PATH = "http://localhost:63101/testData.json";
+            string IEXTrading_API_PATH = BASE_URL + "tops";
+            //string IEXTrading_API_PATH = "http://localhost:63101/testData.json";
             string topsList = "";
 
             List<Top> tops = null;
-                //https://api.iextrading.com/1.0/tops
+                https://api.iextrading.com/1.0/tops
             httpClient.BaseAddress = new Uri(IEXTrading_API_PATH);
             HttpResponseMessage response = httpClient.GetAsync(IEXTrading_API_PATH).GetAwaiter().GetResult();
             if (response.IsSuccessStatusCode)

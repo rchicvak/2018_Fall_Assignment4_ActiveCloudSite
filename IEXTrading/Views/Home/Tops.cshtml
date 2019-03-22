@@ -2,12 +2,36 @@
 
 <h2>Top</h2>
 <hr />
-
+<style>
+    table, th, td {
+        border: 1px solid black;
+        border-collapse: collapse;
+        width: auto;
+        column-width: inherit;
+        
+    }
+    th, td {
+        padding: 1px;
+        text-align: match-parent;
+    }
+    th {
+        
+        background-color: #ffd800;
+        
+    }
+    td {
+        background-color:aliceblue;
+    }
+</style>
 <table class="table">
+  
     <thead>
         <tr>
             <th>
                 Symbol
+            </th>
+            <th>
+                Volume
             </th>
             <th>
                 Market Percent
@@ -17,6 +41,9 @@
             </th>
             <th>
                 Ask Price
+            </th>
+            <th>
+                Spread
             </th>
             <th>
                 Last Sale Price
@@ -39,14 +66,22 @@
                 @Html.DisplayFor(modelItem => item.symbol)
             </td>
             <td>
+                @Html.DisplayFor(modelItem => item.volume)
+
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.marketPercent)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.bidPrice)
+                @Html.DisplayFor(modelItem => item.bidPrice) 
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.askPrice)
             </td>
+            <td>
+                <!---->
+            </td>
+            
             <td>
                 @Html.DisplayFor(modelItem => item.lastSalePrice)
             </td>

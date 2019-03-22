@@ -13,6 +13,7 @@ namespace IEXTrading.Models
         public float marketPercent { get; set; }
         public int bidSize { get; set; }
         public float bidPrice { get; set; }
+        public float spread { get; set;}
         public int askSize { get; set; }
         public float askPrice { get; set; }
         public int volume { get; set; }
