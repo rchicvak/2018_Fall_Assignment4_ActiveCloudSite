@@ -288,6 +288,7 @@ namespace MVCTemplate.Controllers
                 return new CompaniesFinancials(companies, null, null, null);
             }
 
+
             string dates = string.Join(",", financials.Select(e => e.reportDate));
             string percentsRD = string.Join(",", financials.Select(e => e.percentRD));
 

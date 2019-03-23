@@ -12,12 +12,15 @@ namespace IEXTrading.Models
         public List<Financial> financials;
         public List<Financial> convert(string symbol)
         {
-            foreach (Financial f in financials)
+            if(financials != null)  //  due to bad data error handling
             {
-                f.symbol = symbol;
-                f.percentRD = (double)f.researchAndDevelopment / f.totalRevenue;  // division forced non-integer
-                f.debtEquity = (double)f.totalDebt / f.shareholderEquity;  // division forced non-integer
-                f.debtAsset = (double)f.totalDebt / f.totalAssets;  // division forced non-integer
+                foreach (Financial f in financials)
+                {
+                    f.symbol = symbol;
+                    f.percentRD = (double)f.researchAndDevelopment / f.totalRevenue;  // division forced non-integer
+                    f.debtEquity = (double)f.totalDebt / f.shareholderEquity;  // division forced non-integer
+                    f.debtAsset = (double)f.totalDebt / f.totalAssets;  // division forced non-integer
+                }
             }
             return financials;
         }

@@ -2,7 +2,29 @@
 
 <h2>Top</h2>
 <hr />
+<!-- added by raj-->
+<style>
+    table, th, td {
+        border: 1px solid black;
+        border-collapse: collapse;
+        width: auto;
+        column-width: inherit;
+    }
 
+    th, td {
+        padding: 1px;
+        text-align: match-parent;
+    }
+
+    th {
+        background-color: #ffd800;
+    }
+
+    td {
+        background-color: aliceblue;
+    }
+</style>
+<!-- closed style by raj-->
 <table class="table">
     <thead>
         <tr>
@@ -34,34 +56,35 @@
 
         @foreach (var item in Model)
         {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.symbol)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.marketPercent)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.bidPrice)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.askPrice)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.lastSalePrice)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.sector)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.securityType)
-            </td>
-        </tr>
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.symbol)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.marketPercent)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.bidPrice)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.askPrice)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.lastSalePrice)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.sector)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.securityType)
+                </td>
+            </tr>
         }
         <tr>
             <td>
                 <a id="dbopt" asp-controller="Home" asp-action="SaveTops">
-                <img src="~/images/button_save-data.png" /></a>
+                    <img src="~/images/button_save-data.png" />
+                </a>
             </td>
         </tr>
     </tbody>

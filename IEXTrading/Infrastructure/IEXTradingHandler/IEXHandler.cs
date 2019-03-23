@@ -84,9 +84,9 @@ namespace IEXTrading.Infrastructure.IEXTradingHandler
         public List<Top> GetTops()
         {
             // string IEXTrading_API_PATH = BASE_URL + "tops";
-            string IEXTrading_API_PATH = "http://localhost:63102/tops.json";
+            string IEXTrading_API_PATH = "http://ism6225group1.azurewebsites.net/tops.json";
             string topsList = "";
-
+       
             List<Top> tops = null;
            
             httpClient.BaseAddress = new Uri(IEXTrading_API_PATH);
