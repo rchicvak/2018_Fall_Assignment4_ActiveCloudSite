@@ -1,4 +1,4 @@
-﻿@model IEnumerable<IEXTrading.Models.Top>
+﻿@model IEXTrading.Models.ViewModel.CompaniesTops
 
 <h2>Top</h2>
 <hr />
@@ -25,6 +25,18 @@
     }
 </style>
 <!-- closed style by raj-->
+
+
+<form asp-controller="Home" asp-action="TopsSector" method="get">
+    <select name="sector">
+        @foreach (var sector in Model.Sectors)
+        {
+        <option value=@sector selected>@sector</option>
+        }
+    </select>
+    <input type="submit" value="Filter by Sector" />
+</form>
+
 <table class="table">
     <thead>
         <tr>
@@ -41,6 +53,9 @@
                 Ask Price
             </th>
             <th>
+                Spread %
+            </th>
+            <th>
                 Last Sale Price
             </th>
             <th>
@@ -54,31 +69,34 @@
 
     <tbody>
 
-        @foreach (var item in Model)
+        @foreach (var item in Model.Tops)
         {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.symbol)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.marketPercent)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.bidPrice)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.askPrice)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.lastSalePrice)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.sector)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.securityType)
-                </td>
-            </tr>
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.symbol)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.marketPercent)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.bidPrice)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.askPrice)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.spread)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.lastSalePrice)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.sector)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.securityType)
+            </td>
+        </tr>
         }
         <tr>
             <td>

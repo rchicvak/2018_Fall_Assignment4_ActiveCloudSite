@@ -99,6 +99,10 @@ namespace IEXTrading.Infrastructure.IEXTradingHandler
             if (!topsList.Equals(""))
             {
                 tops = JsonConvert.DeserializeObject<List<Top>>(topsList);
+                foreach( Top top in tops)
+                {
+                    top.calculateSpread();
+                }
                 // tops = tops.GetRange(0, 50);
             }
             return tops;

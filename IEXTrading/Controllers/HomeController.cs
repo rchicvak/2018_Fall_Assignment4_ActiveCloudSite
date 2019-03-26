@@ -198,32 +198,41 @@ namespace MVCTemplate.Controllers
             return new CompaniesEquities(companies, equities.Last(), dates, prices, volumes, avgprice, avgvol);
         }
 
- 
+
 
         public IActionResult Tops()
         {
             //Set ViewBag variable first
             ViewBag.dbSucessComp = 0;
-            IEXHandler webHandler = new IEXHandler();
-            List<Top> tops = webHandler.GetTops();
 
-            String topsData = JsonConvert.SerializeObject(tops);
 
+            List<Top> tops = dbContext.Tops.ToList();
+
+            if (tops.Count == 0)
+            {
+                IEXHandler webHandler = new IEXHandler();
+                tops = webHandler.GetTops();
+            }
+
+            var companiesTopsModel = getCompaniesTopsModel(tops, null);
+
+
+            String topsData = JsonConvert.SerializeObject(companiesTopsModel);
             HttpContext.Session.SetString(SessionKeyName, topsData);
 
-            return View(tops);
+            return View(companiesTopsModel);
         }
 
         public IActionResult SaveTops()
         {
             string topsData = HttpContext.Session.GetString(SessionKeyName);
-            List<Top> tops = null;
+            CompaniesTops companiesTops = null;
             if (topsData != "")
             {
-                tops = JsonConvert.DeserializeObject<List<Top>>(topsData);
+                companiesTops = JsonConvert.DeserializeObject<CompaniesTops>(topsData);
             }
 
-            foreach (Top top in tops)
+            foreach (Top top in companiesTops.Tops)
             {
                 //Database will give PK constraint violation error when trying to insert record with existing PK.
                 //So add company only if it doesnt exist, check existence using symbol (PK)
@@ -234,7 +243,7 @@ namespace MVCTemplate.Controllers
             }
             dbContext.SaveChanges();
             ViewBag.dbSuccessComp = 1;
-            return View("Tops", tops);
+            return View("Tops", companiesTops);
         }
 
 
@@ -315,8 +324,52 @@ namespace MVCTemplate.Controllers
             return View(companiesFinancials);
         }
 
+        public CompaniesTops getCompaniesTopsModel(List<Top> tops, List<string> sectors)
+        {
+            if(sectors == null)
+            {
+                sectors = new List<string>();
+
+                foreach (Top top in tops)
+                {
+                    if (!sectors.Contains(top.sector))
+                    {
+                        sectors.Add(top.sector);
+                    }
+                }
+            }
+
+
+            return new CompaniesTops(tops, sectors);
+        }
+
+
+        public IActionResult TopsSector(string sector)  // action
+        {
+            //Set ViewBag variable first
+            ViewBag.dbSucessComp = 0;
+            List<Top> tops = new List<Top>();
+
+            string contextData = HttpContext.Session.GetString(SessionKeyName);
+            CompaniesTops companiesTops = null;
+            if (contextData != "")
+            {
+                companiesTops = JsonConvert.DeserializeObject<CompaniesTops>(contextData);
+            }
+            
+
+            if (sector != null)
+            {
+                tops = dbContext.Tops.Where(c => c.sector.Equals(sector)).OrderByDescending(x => x.spread).ToList();
+            }
+
+            var companiesTopsModel = getCompaniesTopsModel(tops, companiesTops.Sectors);
+            
+            String topsData = JsonConvert.SerializeObject(companiesTopsModel);
+            HttpContext.Session.SetString(SessionKeyName, topsData);
+            
+            return View("Tops", companiesTopsModel);
+        }
 
     }
-
-
 }
